@@ -20,8 +20,9 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="assets/css/style.css?v=20260919g">
-  <script src="assets/js/main.js?v=20260919g" defer></script>
+  <link rel="preload" href="assets/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260919h">
+  <script src="assets/js/main.js?v=20260919h" defer></script>
 </head>
 <body>
 <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
@@ -211,27 +212,63 @@
       <h2>Tout ce dont votre entreprise a besoin, au même endroit</h2>
       <p class="lead">Confiez-nous une mission précise ou l’ensemble de votre gestion administrative : vous gardez la main, nous prenons en charge la technique.</p>
     </div>
-    <div class="grid grid--4">
-      <a class="card reveal" href="services.html#comptabilite">
-        <span class="ico"><svg class="icon " aria-hidden="true" focusable="false"><use href="#i-calc"/></svg></span>
+    <div class="missions">
+      <a class="mission reveal" href="services.html#comptabilite">
+        <span class="mission-disc">
+          <svg class="mission-svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <rect class="s" x="14" y="5" width="36" height="54" rx="4"/>
+            <rect class="s f2" x="19" y="11" width="26" height="10" rx="2"/>
+            <g class="f">
+              <circle cx="24" cy="30" r="2.6"/><circle cx="32" cy="30" r="2.6"/><circle cx="40" cy="30" r="2.6"/>
+              <circle cx="24" cy="38" r="2.6"/><circle cx="32" cy="38" r="2.6"/><circle cx="40" cy="38" r="2.6"/>
+              <circle cx="24" cy="46" r="2.6"/><circle cx="32" cy="46" r="2.6"/><circle cx="40" cy="46" r="2.6"/>
+              <circle cx="24" cy="53" r="2.2"/><circle cx="32" cy="53" r="2.2"/><circle cx="40" cy="53" r="2.2"/>
+            </g>
+          </svg>
+        </span>
         <h3>Comptabilité</h3>
         <p>Tenue des comptes, TVA, bilan, liasse fiscale et tableaux de bord pour piloter votre activité.</p>
         <span class="more">En savoir plus <svg class="icon " aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="card reveal" href="services.html#paie">
-        <span class="ico"><svg class="icon " aria-hidden="true" focusable="false"><use href="#i-file"/></svg></span>
+      <a class="mission reveal" href="services.html#paie">
+        <span class="mission-disc">
+          <svg class="mission-svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <circle class="s f" cx="32" cy="21" r="8"/>
+            <path class="s f2" d="M18 54V47C18 40 24 36 32 36C40 36 46 40 46 47V54Z"/>
+            <circle class="s f" cx="11" cy="28" r="5"/>
+            <path class="s" d="M3 54V49C3 44 6 41 11 41"/>
+            <circle class="s f" cx="53" cy="28" r="5"/>
+            <path class="s" d="M61 54V49C61 44 58 41 53 41"/>
+          </svg>
+        </span>
         <h3>Paie &amp; social</h3>
         <p>Bulletins de paie, DSN, contrats, soldes de tout compte : vos salariés payés juste et à temps.</p>
         <span class="more">En savoir plus <svg class="icon " aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="card reveal" href="services.html#juridique">
-        <span class="ico"><svg class="icon " aria-hidden="true" focusable="false"><use href="#i-building"/></svg></span>
+      <a class="mission reveal" href="services.html#juridique">
+        <span class="mission-disc">
+          <svg class="mission-svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="s" d="M15 5H38L51 18V59H15Z"/>
+            <path class="s" d="M38 5V18H51"/>
+            <path class="s sf" d="M22 27H44M22 34H44M22 41H32"/>
+            <circle class="s f" cx="41" cy="48" r="7"/>
+            <path class="s f2" d="M37 54L35 62L41 59L47 62L45 54Z"/>
+          </svg>
+        </span>
         <h3>Formalités &amp; juridique</h3>
         <p>Création, modification, approbation annuelle des comptes : les démarches administratives sans stress.</p>
         <span class="more">En savoir plus <svg class="icon " aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="card reveal" href="services.html#conseil">
-        <span class="ico"><svg class="icon " aria-hidden="true" focusable="false"><use href="#i-trend"/></svg></span>
+      <a class="mission reveal" href="services.html#conseil">
+        <span class="mission-disc">
+          <svg class="mission-svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path class="s" d="M6 58H58"/>
+            <rect class="s f" x="12" y="42" width="10" height="16"/>
+            <rect class="s f2" x="27" y="34" width="10" height="24"/>
+            <rect class="s f" x="42" y="26" width="10" height="32"/>
+            <path class="s sf" d="M10 30L26 17L34 23L54 8M44 8H54V18"/>
+          </svg>
+        </span>
         <h3>Conseil &amp; gestion</h3>
         <p>Prévisionnel, choix du statut, suivi de trésorerie, dossier de financement : décidez avec les bons chiffres.</p>
         <span class="more">En savoir plus <svg class="icon " aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></span>
