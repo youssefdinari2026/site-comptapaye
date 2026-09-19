@@ -70,7 +70,7 @@
   if (yr) { yr.textContent = new Date().getFullYear(); }
 
   /* ---- Formulaires : contact et candidature (avec CV) ---- */
-  var form = document.querySelector('#contact-form, #career-form');
+  var form = document.querySelector('#contact-form, #career-form, #ad-form');
   if (form) {
     var alertOk = document.getElementById('form-ok');
     var alertErr = document.getElementById('form-err');
@@ -84,6 +84,7 @@
     };
 
     var isCareer = form.getAttribute('data-kind') === 'career';
+    var isAd = form.getAttribute('data-kind') === 'ad';
     var MAX_FILE = 5 * 1024 * 1024; // 5 Mo
     var FILE_EXT = /\.(pdf|docx?)$/i;
 
@@ -113,6 +114,17 @@
         showErr(letter, fileError(letter, false));
         showErr(consent, !consent.checked ? 'Merci d’accepter le traitement de votre candidature.' : '');
         fields.push(cv, letter);
+      } else if (isAd) {
+        var company = form.elements['company'];
+        var adTitle = form.elements['title'];
+        var adDesc = form.elements['description'];
+        var adLink = form.elements['link'];
+        showErr(company, company.value.trim().length < 2 ? 'Merci d’indiquer votre entreprise.' : '');
+        showErr(adTitle, adTitle.value.trim().length < 5 ? 'Le titre est trop court (5 caractères minimum).' : '');
+        showErr(adDesc, adDesc.value.trim().length < 20 ? 'Décrivez votre annonce en quelques lignes (20 caractères minimum).' : '');
+        showErr(adLink, adLink.value.trim() !== '' && !/^(https?:\/\/)?[^\s\/]+\.[^\s\/]{2,}(\/\S*)?$/i.test(adLink.value.trim()) ? 'Ce lien ne semble pas valide.' : '');
+        showErr(consent, !consent.checked ? 'Merci de cocher la case pour valider l’envoi.' : '');
+        fields.push(company, adTitle, adDesc, adLink);
       } else {
         var message = form.elements['message'];
         showErr(message, message.value.trim().length < 10 ? 'Votre message est un peu court (10 caractères minimum).' : '');
@@ -187,6 +199,161 @@
           submitBtn.innerHTML = label;
         });
     });
+  }
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Titre animé : le mot se tape puis s'efface ---- */
+  var rot = document.querySelector('.rotator');
+  if (rot && !reduceMotion) {
+    var words = (rot.getAttribute('data-words') || '').split('|').filter(Boolean);
+    if (words.length > 1) {
+      var wi = Math.max(0, words.indexOf(rot.textContent.trim()));
+      var ci = words[wi].length;
+      var deleting = true;
+      var tick = function () {
+        var word = words[wi];
+        if (deleting) {
+          ci -= 1;
+          rot.textContent = word.slice(0, ci) || '​';
+          if (ci <= 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, 350); return; }
+          setTimeout(tick, 38);
+        } else {
+          ci += 1;
+          rot.textContent = word.slice(0, ci);
+          if (ci >= word.length) { deleting = true; setTimeout(tick, 1900); return; }
+          setTimeout(tick, 85);
+        }
+      };
+      setTimeout(tick, 2200);
+    }
+  }
+
+  /* ---- Carrousel de photos (défilement automatique, pause au survol / focus / bouton) ---- */
+  var slider = document.querySelector('.slider');
+  if (slider) {
+    var slides = slider.querySelectorAll('.slide');
+    var dots = slider.querySelectorAll('.slider-dot');
+    var pauseBtn = slider.querySelector('.slider-pause');
+    var current = 0;
+    var timer = null;
+    var userPaused = reduceMotion;   // pas de défilement automatique si le visiteur a désactivé les animations
+    var hovering = false;
+
+    var show = function (n) {
+      current = (n + slides.length) % slides.length;
+      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === current); });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); d.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+    };
+    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+    var start = function () {
+      stop();
+      if (!userPaused && !hovering && slides.length > 1) { timer = setInterval(function () { show(current + 1); }, 5500); }
+    };
+    var setPauseUi = function () {
+      if (!pauseBtn) { return; }
+      pauseBtn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
+      pauseBtn.setAttribute('aria-label', userPaused ? 'Reprendre le défilement' : 'Mettre le défilement en pause');
+      pauseBtn.querySelector('use').setAttribute('href', userPaused ? '#i-play' : '#i-pause');
+    };
+
+    dots.forEach(function (d, i) { d.addEventListener('click', function () { show(i); start(); }); });
+    if (pauseBtn) { pauseBtn.addEventListener('click', function () { userPaused = !userPaused; setPauseUi(); start(); }); }
+    slider.addEventListener('mouseenter', function () { hovering = true; stop(); });
+    slider.addEventListener('mouseleave', function () { hovering = false; start(); });
+    slider.addEventListener('focusin', function () { hovering = true; stop(); });
+    slider.addEventListener('focusout', function () { hovering = false; start(); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) { stop(); } else { start(); } });
+    setPauseUi();
+    start();
+  }
+
+  /* ---- Actualités : filtres par thème ---- */
+  var newsGrid = document.getElementById('news-grid');
+  if (newsGrid) {
+    var filterBtns = document.querySelectorAll('.filter-bar .chip-btn');
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var f = btn.getAttribute('data-filter');
+        filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        newsGrid.querySelectorAll('.news-card').forEach(function (card) {
+          var show = f === 'all' || card.getAttribute('data-cat') === f;
+          card.hidden = !show;
+          if (show) { card.classList.add('is-visible'); }
+        });
+      });
+    });
+  }
+
+  /* ---- Offres de nos clients : affichage des annonces publiées (assets/data/annonces.json) ---- */
+  var adsList = document.getElementById('ads-list');
+  if (adsList) {
+    var adsEmpty = document.getElementById('ads-empty');
+    var adsFilters = document.getElementById('ads-filters');
+    var CATS = { offre: 'Offre commerciale', partenaire: 'Recherche de partenaire', emploi: 'Emploi', cession: 'Cession / reprise', evenement: 'Événement', autre: 'Autre' };
+    var fmtDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    var el = function (tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) { n.className = cls; }
+      if (text) { n.textContent = text; }   // textContent : aucune injection de HTML possible
+      return n;
+    };
+
+    var renderAds = function (items, filter) {
+      adsList.textContent = '';
+      items.filter(function (a) { return filter === 'all' || a.categorie === filter; }).forEach(function (a) {
+        var card = el('article', 'ad-card');
+        card.appendChild(el('span', 'tag tag--entreprise', CATS[a.categorie] || CATS.autre));
+        card.appendChild(el('h3', '', a.titre));
+        card.appendChild(el('div', 'ad-company', a.entreprise));
+        card.appendChild(el('p', 'ad-desc', a.description));
+        var foot = el('div', 'ad-foot');
+        if (a.contact) { foot.appendChild(el('span', '', 'Contact : ' + a.contact)); }
+        if (a.lien && /^https?:\/\//i.test(a.lien)) {
+          var link = el('a', '', 'Voir le site');
+          link.href = a.lien; link.target = '_blank'; link.rel = 'noopener noreferrer nofollow ugc';
+          foot.appendChild(link);
+        }
+        if (a.date) {
+          var d = new Date(a.date + 'T12:00:00');
+          if (!isNaN(d.getTime())) { foot.appendChild(el('span', '', 'Publiée le ' + fmtDate.format(d))); }
+        }
+        card.appendChild(foot);
+        adsList.appendChild(card);
+      });
+    };
+
+    fetch('assets/data/annonces.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : { annonces: [] }; })
+      .catch(function () { return { annonces: [] }; })
+      .then(function (data) {
+        var today = new Date().toISOString().slice(0, 10);
+        var items = (data && Array.isArray(data.annonces) ? data.annonces : [])
+          .filter(function (a) { return a && a.titre && a.description && (!a.expire || a.expire >= today); })
+          .sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
+        if (!items.length) { adsEmpty.hidden = false; return; }
+        adsEmpty.hidden = true;
+
+        var cats = [];
+        items.forEach(function (a) { if (cats.indexOf(a.categorie) === -1) { cats.push(a.categorie); } });
+        if (cats.length > 1) {
+          adsFilters.hidden = false;
+          var addBtn = function (value, label, pressed) {
+            var b = el('button', 'chip-btn', label);
+            b.type = 'button';
+            b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+            b.addEventListener('click', function () {
+              adsFilters.querySelectorAll('.chip-btn').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+              renderAds(items, value);
+            });
+            adsFilters.appendChild(b);
+          };
+          addBtn('all', 'Toutes', true);
+          cats.forEach(function (c) { addBtn(c, CATS[c] || CATS.autre, false); });
+        }
+        renderAds(items, 'all');
+      });
   }
 
   /* ---- Simulateur brut / net (estimation indicative) ---- */
