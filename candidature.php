@@ -1,6 +1,6 @@
 <?php
 /**
- * ComptaPaye — traitement du formulaire de candidature (stage / alternance / emploi).
+ * ComptaPaie — traitement du formulaire de candidature (stage / alternance / emploi).
  *
  * - Accepte uniquement les requêtes POST multipart (CV en pièce jointe).
  * - Contrôles : origine, champ piège (honeypot), limitation de fréquence par IP,
@@ -213,10 +213,10 @@ $headers = [
     'Reply-To' => $email,
     'MIME-Version' => '1.0',
     'Content-Type' => 'multipart/mixed; boundary="' . $boundary . '"',
-    'X-Mailer' => 'ComptaPaye-candidature',
+    'X-Mailer' => 'ComptaPaie-candidature',
 ];
 
-$subject = '[ComptaPaye] Candidature — ' . $kindLabel . ' — ' . $name;
+$subject = '[ComptaPaie] Candidature — ' . $kindLabel . ' — ' . $name;
 $sent = mail(
     $CAREERS_TO,
     mb_encode_mimeheader($subject, 'UTF-8', 'B', "\r\n"),

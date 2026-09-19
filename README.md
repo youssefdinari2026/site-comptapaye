@@ -1,4 +1,4 @@
-# ComptaPaye — site vitrine (comptapaye.com)
+# ComptaPaie — site vitrine (comptapaye.com)
 
 Site statique (HTML / CSS / JavaScript) avec un petit formulaire de contact en PHP.
 Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque minimale, chargement très rapide.
@@ -26,7 +26,7 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 ## À compléter avant la mise en ligne
 
 1. **`mentions-legales.html`** : raison sociale, SIREN/SIRET, TVA et président sont renseignés (COMPTAPAIE EXPERT, SASU). Reste à compléter (repérés par `[À COMPLÉTER]`) : capital social, RCS le cas échéant, **n° d'inscription à l'Ordre des experts-comptables**, assurance responsabilité civile professionnelle. Obligatoire en France pour une profession réglementée.
-2. **Adresse e-mail** : le site utilise `contact@comptapaye.com`. Créez cette boîte dans hPanel > E-mails, ou remplacez l'adresse partout (recherche/remplacement dans les fichiers) et dans `contact-config.php` (`$CONTACT_TO` pour les demandes, `$CAREERS_TO` pour les candidatures). Créez aussi `no-reply@comptapaye.com` (expéditeur des notifications) ou modifiez `$CONTACT_FROM`.
+2. **Adresse e-mail** : le site utilise `contact@comptapaie.com`. Créez cette boîte dans hPanel > E-mails, ou remplacez l'adresse partout (recherche/remplacement dans les fichiers) et dans `contact-config.php` (`$CONTACT_TO` pour les demandes, `$CAREERS_TO` pour les candidatures). Créez aussi `no-reply@comptapaye.com` (expéditeur des notifications) ou modifiez `$CONTACT_FROM`.
 3. **Textes et engagements** : relisez tout le contenu et retirez ce qui ne correspond pas à votre activité (par ex. « rendez-vous au cabinet ou à distance »). Les formules « Sur devis » n'affichent volontairement aucun prix.
 4. **Horaires d'ouverture** : non renseignés faute d'information ; à ajouter dans `contact.html` si souhaité.
 
@@ -38,7 +38,7 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
      ```bash
      git init -b main
      git add .
-     git commit -m "Site ComptaPaye"
+     git commit -m "Site ComptaPaie"
      git remote add origin https://github.com/VOTRE-COMPTE/comptapaye.git
      git push -u origin main
      ```

@@ -1,6 +1,6 @@
 <?php
 /**
- * ComptaPaye — traitement du formulaire de contact.
+ * ComptaPaie — traitement du formulaire de contact.
  *
  * - Accepte uniquement les requêtes POST.
  * - Protections : champ piège (honeypot), vérification de l'origine,
@@ -91,7 +91,7 @@ if (mb_strlen($name) < 2 || mb_strlen($message) < 10 || !$consent || !filter_var
 }
 
 // 5. Envoi.
-$mailSubject = '[ComptaPaye] ' . $subjectLabel . ' — ' . $name;
+$mailSubject = '[ComptaPaie] ' . $subjectLabel . ' — ' . $name;
 $body = "Nouvelle demande reçue depuis le site.\n\n"
     . "Nom : $name\n"
     . "E-mail : $email\n"
@@ -106,7 +106,7 @@ $headers = [
     'MIME-Version' => '1.0',
     'Content-Type' => 'text/plain; charset=UTF-8',
     'Content-Transfer-Encoding' => '8bit',
-    'X-Mailer' => 'ComptaPaye-contact',
+    'X-Mailer' => 'ComptaPaie-contact',
 ];
 
 $sent = mail(

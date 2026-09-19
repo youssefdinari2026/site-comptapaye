@@ -1,6 +1,6 @@
 <?php
 /**
- * ComptaPaye — dépôt d'une annonce par un client (page « Offres de nos clients »).
+ * ComptaPaie — dépôt d'une annonce par un client (page « Offres de nos clients »).
  *
  * Rien n'est publié automatiquement : l'annonce est envoyée par e-mail au cabinet, qui la relit
  * puis la publie en ajoutant le bloc JSON fourni dans le mail au fichier assets/data/annonces.json.
@@ -113,7 +113,7 @@ $snippet = json_encode([
     'titre' => $title,
     'entreprise' => $company,
     'description' => $description,
-    'contact' => $publicContact !== '' ? $publicContact : 'Via le cabinet ComptaPaye',
+    'contact' => $publicContact !== '' ? $publicContact : 'Via le cabinet ComptaPaie',
     'lien' => $link,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
@@ -139,10 +139,10 @@ $headers = [
     'MIME-Version' => '1.0',
     'Content-Type' => 'text/plain; charset=UTF-8',
     'Content-Transfer-Encoding' => '8bit',
-    'X-Mailer' => 'ComptaPaye-annonce',
+    'X-Mailer' => 'ComptaPaie-annonce',
 ];
 
-$subject = '[ComptaPaye] Nouvelle annonce à valider — ' . $company;
+$subject = '[ComptaPaie] Nouvelle annonce à valider — ' . $company;
 $sent = mail(
     $ANNONCE_TO,
     mb_encode_mimeheader($subject, 'UTF-8', 'B', "\r\n"),
