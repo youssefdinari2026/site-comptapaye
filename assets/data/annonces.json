@@ -9,19 +9,16 @@
       "description": "Une Personne sérieuse et Rigoureuse,",
       "contact": "Via le cabinet ComptaPaie",
       "lien": ""
-    },{
-  "annonces": [
+    },
     {
       "id": "2026-09-20-43895f",
       "date": "2026-09-20",
       "categorie": "emploi",
       "titre": "Recherche D'Emploi",
-      "entreprise": "ComptaPaie",
-      "description": "Une Personne sérieuse et Rigoureuse,",
+      "entreprise": "XXXX",
+      "description": "Une Personne sérieuse mais non Rigoureuse,",
       "contact": "Via le cabinet ComptaPaie",
       "lien": ""
     }
-  ]
-}
   ]
 }
