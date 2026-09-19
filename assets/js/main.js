@@ -49,8 +49,8 @@
   var yr = document.getElementById('year');
   if (yr) { yr.textContent = new Date().getFullYear(); }
 
-  /* ---- Formulaire de contact ---- */
-  var form = document.getElementById('contact-form');
+  /* ---- Formulaires : contact et candidature (avec CV) ---- */
+  var form = document.querySelector('#contact-form, #career-form');
   if (form) {
     var alertOk = document.getElementById('form-ok');
     var alertErr = document.getElementById('form-err');
@@ -63,19 +63,44 @@
       if (box) { box.textContent = msg || ''; }
     };
 
+    var isCareer = form.getAttribute('data-kind') === 'career';
+    var MAX_FILE = 5 * 1024 * 1024; // 5 Mo
+    var FILE_EXT = /\.(pdf|docx?)$/i;
+
+    // Retourne un message d'erreur, ou '' si le fichier est correct.
+    var fileError = function (input, required) {
+      var f = input.files && input.files[0];
+      if (!f) { return required ? 'Merci de joindre votre CV.' : ''; }
+      if (!FILE_EXT.test(f.name)) { return 'Format non accepté : utilisez un fichier PDF, DOC ou DOCX.'; }
+      if (f.size > MAX_FILE) { return 'Fichier trop volumineux (5 Mo maximum).'; }
+      return '';
+    };
+
     var validate = function () {
       var ok = true;
       var name = form.elements['name'];
       var email = form.elements['email'];
-      var message = form.elements['message'];
       var consent = form.elements['consent'];
+      var fields = [name, email, consent];
 
       showErr(name, name.value.trim().length < 2 ? 'Merci d’indiquer votre nom.' : '');
       showErr(email, !emailRe.test(email.value.trim()) ? 'Merci d’indiquer une adresse e-mail valide.' : '');
-      showErr(message, message.value.trim().length < 10 ? 'Votre message est un peu court (10 caractères minimum).' : '');
-      showErr(consent, !consent.checked ? 'Merci d’accepter le traitement de votre demande.' : '');
 
-      [name, email, message, consent].forEach(function (f) {
+      if (isCareer) {
+        var cv = form.elements['cv'];
+        var letter = form.elements['letter'];
+        showErr(cv, fileError(cv, true));
+        showErr(letter, fileError(letter, false));
+        showErr(consent, !consent.checked ? 'Merci d’accepter le traitement de votre candidature.' : '');
+        fields.push(cv, letter);
+      } else {
+        var message = form.elements['message'];
+        showErr(message, message.value.trim().length < 10 ? 'Votre message est un peu court (10 caractères minimum).' : '');
+        showErr(consent, !consent.checked ? 'Merci d’accepter le traitement de votre demande.' : '');
+        fields.push(message);
+      }
+
+      fields.forEach(function (f) {
         if (f.getAttribute('aria-invalid') === 'true') { ok = false; }
       });
       if (!ok) {
@@ -114,7 +139,7 @@
 
       e.preventDefault();
       submitBtn.disabled = true;
-      var label = submitBtn.textContent;
+      var label = submitBtn.innerHTML;
       submitBtn.textContent = 'Envoi en cours…';
 
       fetch(form.action, {
@@ -139,7 +164,7 @@
         })
         .then(function () {
           submitBtn.disabled = false;
-          submitBtn.textContent = label;
+          submitBtn.innerHTML = label;
         });
     });
   }
