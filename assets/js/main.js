@@ -1,4 +1,4 @@
-/* ComptaPaye — scripts (vanilla, sans dépendance, sans cookie) */
+/* ComptaPaie — scripts (vanilla, sans dépendance, sans cookie) */
 (function () {
   'use strict';
 
