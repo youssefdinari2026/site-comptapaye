@@ -203,72 +203,47 @@
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- Titre animé : le mot se tape puis s'efface ---- */
-  var rot = document.querySelector('.rotator');
-  if (rot && !reduceMotion) {
-    var words = (rot.getAttribute('data-words') || '').split('|').filter(Boolean);
-    if (words.length > 1) {
-      var wi = Math.max(0, words.indexOf(rot.textContent.trim()));
-      var ci = words[wi].length;
-      var deleting = true;
-      var tick = function () {
-        var word = words[wi];
-        if (deleting) {
-          ci -= 1;
-          rot.textContent = word.slice(0, ci) || '​';
-          if (ci <= 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, 350); return; }
-          setTimeout(tick, 38);
-        } else {
-          ci += 1;
-          rot.textContent = word.slice(0, ci);
-          if (ci >= word.length) { deleting = true; setTimeout(tick, 1900); return; }
-          setTimeout(tick, 85);
-        }
-      };
-      setTimeout(tick, 2200);
-    }
+  /* ---- Accueil : le fond d'écran alterne entre deux photos (fondu + léger zoom) ---- */
+  var heroBg = document.querySelector('.hero-bg');
+  if (heroBg) {
+    var bgImgs = heroBg.querySelectorAll('img');
+    var bgDots = document.querySelectorAll('.bg-dot');
+    var bgPauseBtn = document.querySelector('.bg-pause');
+    var bgIndex = 0;
+    var bgTimer = null;
+    var bgPaused = reduceMotion;    // pas de changement automatique si le visiteur a désactivé les animations
+
+    var showBg = function (n) {
+      bgIndex = (n + bgImgs.length) % bgImgs.length;
+      bgImgs.forEach(function (im, i) {
+        if (i === bgIndex && !im.complete && im.loading === 'lazy') { im.loading = 'eager'; }
+        im.classList.toggle('is-active', i === bgIndex);
+      });
+      bgDots.forEach(function (d, i) {
+        d.classList.toggle('is-active', i === bgIndex);
+        d.setAttribute('aria-current', i === bgIndex ? 'true' : 'false');
+      });
+    };
+    var stopBg = function () { if (bgTimer) { clearInterval(bgTimer); bgTimer = null; } };
+    var startBg = function () {
+      stopBg();
+      if (!bgPaused && bgImgs.length > 1) { bgTimer = setInterval(function () { showBg(bgIndex + 1); }, 7000); }
+    };
+    var syncBgPause = function () {
+      if (!bgPauseBtn) { return; }
+      bgPauseBtn.setAttribute('aria-pressed', bgPaused ? 'true' : 'false');
+      bgPauseBtn.setAttribute('aria-label', bgPaused ? 'Reprendre le changement de fond d’écran' : 'Mettre en pause le changement de fond d’écran');
+      bgPauseBtn.querySelector('use').setAttribute('href', bgPaused ? '#i-play' : '#i-pause');
+    };
+
+    bgDots.forEach(function (d, i) { d.addEventListener('click', function () { showBg(i); startBg(); }); });
+    if (bgPauseBtn) { bgPauseBtn.addEventListener('click', function () { bgPaused = !bgPaused; syncBgPause(); startBg(); }); }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) { stopBg(); } else { startBg(); } });
+    syncBgPause();
+    startBg();
   }
 
-  /* ---- Carrousel de photos (défilement automatique, pause au survol / focus / bouton) ---- */
-  var slider = document.querySelector('.slider');
-  if (slider) {
-    var slides = slider.querySelectorAll('.slide');
-    var dots = slider.querySelectorAll('.slider-dot');
-    var pauseBtn = slider.querySelector('.slider-pause');
-    var current = 0;
-    var timer = null;
-    var userPaused = reduceMotion;   // pas de défilement automatique si le visiteur a désactivé les animations
-    var hovering = false;
-
-    var show = function (n) {
-      current = (n + slides.length) % slides.length;
-      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === current); });
-      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); d.setAttribute('aria-current', i === current ? 'true' : 'false'); });
-    };
-    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
-    var start = function () {
-      stop();
-      if (!userPaused && !hovering && slides.length > 1) { timer = setInterval(function () { show(current + 1); }, 5500); }
-    };
-    var setPauseUi = function () {
-      if (!pauseBtn) { return; }
-      pauseBtn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
-      pauseBtn.setAttribute('aria-label', userPaused ? 'Reprendre le défilement' : 'Mettre le défilement en pause');
-      pauseBtn.querySelector('use').setAttribute('href', userPaused ? '#i-play' : '#i-pause');
-    };
-
-    dots.forEach(function (d, i) { d.addEventListener('click', function () { show(i); start(); }); });
-    if (pauseBtn) { pauseBtn.addEventListener('click', function () { userPaused = !userPaused; setPauseUi(); start(); }); }
-    slider.addEventListener('mouseenter', function () { hovering = true; stop(); });
-    slider.addEventListener('mouseleave', function () { hovering = false; start(); });
-    slider.addEventListener('focusin', function () { hovering = true; stop(); });
-    slider.addEventListener('focusout', function () { hovering = false; start(); });
-    document.addEventListener('visibilitychange', function () { if (document.hidden) { stop(); } else { start(); } });
-    setPauseUi();
-    start();
-  }
-
-  /* ---- Actualités : filtres par thème ---- */
+/* ---- Actualités : filtres par thème ---- */
   var newsGrid = document.getElementById('news-grid');
   if (newsGrid) {
     var filterBtns = document.querySelectorAll('.filter-bar .chip-btn');
