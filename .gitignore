@@ -1,0 +1,17 @@
+# Système
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Sauvegardes / archives / journaux
+*.zip
+*.bak
+*.log
+*.sql
+
+# Ne jamais versionner de secrets
+.env
