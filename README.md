@@ -10,20 +10,21 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 | `index.html` | Accueil |
 | `services.html` | Détail des services et formules |
 | `simulateur-brut-net.html` | Simulateur salaire brut ↔ net (calcul dans le navigateur) |
-| `a-propos.html`, `contact.html` | Présentation, formulaire de contact |
-| `mentions-legales.html`, `confidentialite.html` | Pages légales (RGPD) |
+| `a-propos.html`, `contact.html` | Présentation, coordonnées et formulaire de contact |
+| `candidature.html` | Page « Stage / Emploi » (s'ouvre dans un nouvel onglet) : candidature avec CV en pièce jointe |
+| `mentions-legales.html`, `confidentialite.html` | Pages légales (RGPD, profession d'expert-comptable) |
 | `404.html` | Page d'erreur |
-| `contact.php` + `contact-config.php` | Envoi du formulaire par e-mail |
+| `contact.php`, `candidature.php` + `contact-config.php` | Envoi des formulaires par e-mail (les CV ne sont jamais stockés sur le serveur) |
 | `.htaccess` | HTTPS, www → domaine nu, en-têtes de sécurité, cache, compression |
 | `robots.txt`, `sitemap.xml` | Référencement |
 | `assets/` | CSS, JS, images |
 
 ## À compléter avant la mise en ligne
 
-1. **`mentions-legales.html`** : raison sociale, adresse, SIREN/SIRET, TVA, directeur de la publication (repérés par `[À COMPLÉTER]`). Obligatoire en France.
-2. **Adresse e-mail** : le site utilise `contact@comptapaye.com`. Créez cette boîte dans hPanel > E-mails, ou remplacez l'adresse partout (recherche/remplacement dans les fichiers) et dans `contact-config.php`. Créez aussi `no-reply@comptapaye.com` (expéditeur des notifications) ou modifiez `$CONTACT_FROM`.
-3. **Textes et engagements** : relisez tout le contenu et retirez ce qui ne correspond pas à votre activité. Les formules « Sur devis » n'affichent volontairement aucun prix.
-4. **Titre « expert-comptable »** : ce terme est réglementé en France. Il n'est volontairement pas utilisé sur le site ; ne l'ajoutez que si vous y êtes légalement habilité.
+1. **`mentions-legales.html`** : raison sociale, SIREN/SIRET, TVA, directeur de la publication, **n° d'inscription à l'Ordre des experts-comptables**, assurance responsabilité civile professionnelle (repérés par `[À COMPLÉTER]`). Obligatoire en France pour une profession réglementée.
+2. **Adresse e-mail** : le site utilise `contact@comptapaye.com`. Créez cette boîte dans hPanel > E-mails, ou remplacez l'adresse partout (recherche/remplacement dans les fichiers) et dans `contact-config.php` (`$CONTACT_TO` pour les demandes, `$CAREERS_TO` pour les candidatures). Créez aussi `no-reply@comptapaye.com` (expéditeur des notifications) ou modifiez `$CONTACT_FROM`.
+3. **Textes et engagements** : relisez tout le contenu et retirez ce qui ne correspond pas à votre activité (par ex. « rendez-vous au cabinet ou à distance »). Les formules « Sur devis » n'affichent volontairement aucun prix.
+4. **Horaires d'ouverture** : non renseignés faute d'information ; à ajouter dans `contact.html` si souhaité.
 
 ## Mise en ligne sur Hostinger via GitHub
 
@@ -41,7 +42,7 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 3. **Sites web > Gérer > Avancé > Git** : renseignez l'URL du dépôt et la branche `main`, laissez le chemin d'installation **vide** (= `public_html`), puis « Créer ».
    - Dépôt privé : utilisez l'URL SSH (`git@github.com:...`) et ajoutez la clé SSH affichée par Hostinger dans GitHub > Settings > Deploy keys.
 4. **Déploiement automatique** : dans la même page Git, copiez l'URL du webhook Hostinger et collez-la dans GitHub > Settings > Webhooks > Add webhook (événement « push »). Chaque `git push` mettra alors le site à jour.
-5. Vérifiez : `https://comptapaye.com`, les 7 pages, le formulaire de contact (envoyez-vous un message de test) et la page 404.
+5. Vérifiez : `https://comptapaye.com`, les 8 pages, le formulaire de contact **et** le formulaire de candidature (envoyez-vous un test avec un CV en PDF : la pièce jointe doit arriver dans la boîte) et la page 404.
 6. Une fois en ligne : ajoutez le site à **Google Search Console** et soumettez `https://comptapaye.com/sitemap.xml`.
 
 ## Modifier le site
