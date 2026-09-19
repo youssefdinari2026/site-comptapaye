@@ -203,44 +203,86 @@
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- Accueil : le fond d'écran alterne entre deux photos (fondu + léger zoom) ---- */
-  var heroBg = document.querySelector('.hero-bg');
-  if (heroBg) {
-    var bgImgs = heroBg.querySelectorAll('img');
-    var bgDots = document.querySelectorAll('.bg-dot');
-    var bgPauseBtn = document.querySelector('.bg-pause');
-    var bgIndex = 0;
-    var bgTimer = null;
-    var bgPaused = reduceMotion;    // pas de changement automatique si le visiteur a désactivé les animations
+  /* ---- Accueil : diaporama à 2 diapositives (photo + texte), glissement de droite à gauche ---- */
+  var heroEl = document.querySelector('.hero');
+  var heroSlides = heroEl ? heroEl.querySelectorAll('.hero-slide') : [];
+  if (heroSlides.length > 1) {
+    var heroDots = heroEl.querySelectorAll('.bg-dot');
+    var heroPauseBtn = heroEl.querySelector('.bg-pause');
+    var heroCur = 0;
+    var heroTimer = null;
+    var heroPaused = reduceMotion;   // pas de défilement automatique si le visiteur a désactivé les animations
+    var heroHover = false;
+    var DELAY = 8500;                // laisse le temps de lire le texte
 
-    var showBg = function (n) {
-      bgIndex = (n + bgImgs.length) % bgImgs.length;
-      bgImgs.forEach(function (im, i) {
-        if (i === bgIndex && !im.complete && im.loading === 'lazy') { im.loading = 'eager'; }
-        im.classList.toggle('is-active', i === bgIndex);
-      });
-      bgDots.forEach(function (d, i) {
-        d.classList.toggle('is-active', i === bgIndex);
-        d.setAttribute('aria-current', i === bgIndex ? 'true' : 'false');
+    var goTo = function (n, dir) {
+      n = (n + heroSlides.length) % heroSlides.length;
+      if (n === heroCur) { return; }
+      var out = heroSlides[heroCur];
+      var inn = heroSlides[n];
+      // 1) place la diapositive entrante hors écran, du bon côté, sans animation
+      inn.classList.add('no-anim');
+      inn.classList.remove('is-active', 'is-before', 'is-after');
+      inn.classList.add(dir > 0 ? 'is-after' : 'is-before');
+      void inn.offsetWidth;          // force le calcul de la mise en page
+      inn.classList.remove('no-anim');
+      // 2) fait glisser : l'ancienne sort d'un côté, la nouvelle entre de l'autre
+      out.classList.remove('is-active');
+      out.classList.add(dir > 0 ? 'is-before' : 'is-after');
+      inn.classList.remove('is-before', 'is-after');
+      inn.classList.add('is-active');
+      var lazy = inn.querySelector('img[loading="lazy"]');
+      if (lazy) { lazy.loading = 'eager'; }
+      heroCur = n;
+      heroDots.forEach(function (d, i) {
+        d.classList.toggle('is-active', i === heroCur);
+        d.setAttribute('aria-current', i === heroCur ? 'true' : 'false');
       });
     };
-    var stopBg = function () { if (bgTimer) { clearInterval(bgTimer); bgTimer = null; } };
-    var startBg = function () {
-      stopBg();
-      if (!bgPaused && bgImgs.length > 1) { bgTimer = setInterval(function () { showBg(bgIndex + 1); }, 7000); }
+    var stopHero = function () { if (heroTimer) { clearInterval(heroTimer); heroTimer = null; } };
+    var startHero = function () {
+      stopHero();
+      if (!heroPaused && !heroHover && !document.hidden) { heroTimer = setInterval(function () { goTo(heroCur + 1, 1); }, DELAY); }
     };
-    var syncBgPause = function () {
-      if (!bgPauseBtn) { return; }
-      bgPauseBtn.setAttribute('aria-pressed', bgPaused ? 'true' : 'false');
-      bgPauseBtn.setAttribute('aria-label', bgPaused ? 'Reprendre le changement de fond d’écran' : 'Mettre en pause le changement de fond d’écran');
-      bgPauseBtn.querySelector('use').setAttribute('href', bgPaused ? '#i-play' : '#i-pause');
+    var syncHeroPause = function () {
+      if (!heroPauseBtn) { return; }
+      heroPauseBtn.setAttribute('aria-pressed', heroPaused ? 'true' : 'false');
+      heroPauseBtn.setAttribute('aria-label', heroPaused ? 'Reprendre le défilement automatique' : 'Mettre en pause le défilement automatique');
+      heroPauseBtn.querySelector('use').setAttribute('href', heroPaused ? '#i-play' : '#i-pause');
     };
 
-    bgDots.forEach(function (d, i) { d.addEventListener('click', function () { showBg(i); startBg(); }); });
-    if (bgPauseBtn) { bgPauseBtn.addEventListener('click', function () { bgPaused = !bgPaused; syncBgPause(); startBg(); }); }
-    document.addEventListener('visibilitychange', function () { if (document.hidden) { stopBg(); } else { startBg(); } });
-    syncBgPause();
-    startBg();
+    var prevBtn = heroEl.querySelector('.hero-arrow--prev');
+    var nextBtn = heroEl.querySelector('.hero-arrow--next');
+    if (prevBtn) { prevBtn.addEventListener('click', function () { goTo(heroCur - 1, -1); startHero(); }); }
+    if (nextBtn) { nextBtn.addEventListener('click', function () { goTo(heroCur + 1, 1); startHero(); }); }
+    heroDots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i, i > heroCur ? 1 : -1); startHero(); }); });
+    if (heroPauseBtn) { heroPauseBtn.addEventListener('click', function () { heroPaused = !heroPaused; syncHeroPause(); startHero(); }); }
+
+    // Pause pendant la lecture (survol / focus clavier) et quand l'onglet est masqué
+    heroEl.addEventListener('mouseenter', function () { heroHover = true; stopHero(); });
+    heroEl.addEventListener('mouseleave', function () { heroHover = false; startHero(); });
+    heroEl.addEventListener('focusin', function () { heroHover = true; stopHero(); });
+    heroEl.addEventListener('focusout', function () { heroHover = false; startHero(); });
+    document.addEventListener('visibilitychange', startHero);
+
+    // Glissement du doigt sur mobile
+    var touchX = null;
+    heroEl.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    heroEl.addEventListener('touchend', function (e) {
+      if (touchX === null) { return; }
+      var dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 50) { goTo(heroCur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); startHero(); }
+    }, { passive: true });
+
+    // Flèches gauche / droite du clavier quand le focus est dans le bandeau
+    heroEl.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { goTo(heroCur + 1, 1); startHero(); }
+      if (e.key === 'ArrowLeft') { goTo(heroCur - 1, -1); startHero(); }
+    });
+
+    syncHeroPause();
+    startHero();
   }
 
 /* ---- Actualités : filtres par thème ---- */
