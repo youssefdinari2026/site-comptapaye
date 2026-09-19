@@ -13,6 +13,9 @@ $CONTACT_FROM = 'ComptaPaye <no-reply@comptapaye.com>';
 // Adresse qui reçoit les candidatures (stage, alternance, emploi) avec CV en pièce jointe.
 $CAREERS_TO = 'contact@comptapaye.com';
 
+// Adresse qui reçoit les annonces déposées par les clients (à valider avant publication).
+$ANNONCE_TO = 'contact@comptapaye.com';
+
 // Nombre maximum de messages par visiteur et par heure.
 $CONTACT_MAX_PER_HOUR = 5;
 

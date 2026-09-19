@@ -10,6 +10,10 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 | `index.html` | Accueil |
 | `services.html` | Détail des services et formules |
 | `simulateur-brut-net.html` | Simulateur salaire brut ↔ net (calcul dans le navigateur) |
+| `actualites.html` | Actualités fiscales, sociales et comptables (fiches avec filtres par thème) |
+| `offres-clients.html` | Vitrine des annonces de nos clients + formulaire de dépôt d'annonce |
+| `annonce.php` | Reçoit une annonce et l'envoie au cabinet par e-mail pour validation |
+| `assets/data/annonces.json` | Liste des annonces publiées (voir plus bas) |
 | `a-propos.html`, `contact.html` | Présentation, coordonnées et formulaire de contact |
 | `candidature.html` | Page « Stage / Emploi » (s'ouvre dans un nouvel onglet) : candidature avec CV en pièce jointe |
 | `mentions-legales.html`, `confidentialite.html` | Pages légales (RGPD, profession d'expert-comptable) |
@@ -45,7 +49,19 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 5. Vérifiez : `https://comptapaye.com`, les 8 pages, le formulaire de contact **et** le formulaire de candidature (envoyez-vous un test avec un CV en PDF : la pièce jointe doit arriver dans la boîte) et la page 404.
 6. Une fois en ligne : ajoutez le site à **Google Search Console** et soumettez `https://comptapaye.com/sitemap.xml`.
 
+## Publier une annonce de client
+
+1. Le client remplit le formulaire de `offres-clients.html` : vous recevez un e-mail « Nouvelle annonce à valider » (à l'adresse `$ANNONCE_TO` de `contact-config.php`).
+2. Après relecture, copiez le bloc JSON fourni en bas du mail dans la liste `"annonces"` du fichier `assets/data/annonces.json` (sur GitHub : ouvrir le fichier > crayon > coller > « Commit changes »). Séparez les annonces par une virgule.
+3. Après le déploiement Hostinger, l'annonce apparaît sur la page (rechargement du fichier sous 5 minutes).
+
+Champs d'une annonce : `id`, `date` (AAAA-MM-JJ), `categorie` (`offre`, `partenaire`, `emploi`, `cession`, `evenement`, `autre`), `titre`, `entreprise`, `description`, `contact`, `lien` (facultatif) et `expire` (facultatif, AAAA-MM-JJ : l'annonce disparaît après cette date). Pour retirer une annonce, supprimez son bloc.
+
 ## Modifier le site
+
+- **Titre animé de l'accueil** : les mots qui se tapent (`comptabilité|paie|fiscalité|gestion|trésorerie`) sont dans l'attribut `data-words` du `<span class="rotator">` de `index.html`.
+- **Photos qui défilent** : les 2 diapositives du carrousel de l'accueil (`assets/img/hero-analyse.jpg` et `assets/img/president.jpg`). Le défilement s'arrête au survol, avec le bouton pause, et n'est pas automatique pour les visiteurs qui ont désactivé les animations. `hero-analyse.jpg` provient de la bannière de l'ancien site comptapaie.com (photo de banque d'images) : vérifiez que vous avez le droit de l'utiliser.
+- **Actualités** : chaque fiche est un bloc `<article class="news-card">` de `actualites.html`. Les textes sont des repères généraux à faire valider et à mettre à jour régulièrement.
 
 - Mot du président : section `#president` de `index.html`, photo dans `assets/img/president.jpg` (640 × 800 px, portrait 4:5).
 - En-tête : la barre du haut (adresse, e-mail, téléphone, bandeau orange « Stage / Emploi ») et la barre du logo disparaissent quand on descend dans la page et réapparaissent dès qu'on remonte (`assets/js/main.js`).

@@ -52,6 +52,8 @@ AddDefaultCharset UTF-8
   ExpiresByType application/javascript "access plus 1 hour"
   ExpiresByType application/x-javascript "access plus 1 hour"
   ExpiresByType text/javascript "access plus 1 hour"
+  # Annonces : rechargées rapidement pour que les nouvelles publications apparaissent vite.
+  ExpiresByType application/json "access plus 5 minutes"
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
