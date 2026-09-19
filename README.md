@@ -21,7 +21,7 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 
 ## À compléter avant la mise en ligne
 
-1. **`mentions-legales.html`** : raison sociale, SIREN/SIRET, TVA, directeur de la publication, **n° d'inscription à l'Ordre des experts-comptables**, assurance responsabilité civile professionnelle (repérés par `[À COMPLÉTER]`). Obligatoire en France pour une profession réglementée.
+1. **`mentions-legales.html`** : raison sociale, SIREN/SIRET, TVA et président sont renseignés (COMPTAPAIE EXPERT, SASU). Reste à compléter (repérés par `[À COMPLÉTER]`) : capital social, RCS le cas échéant, **n° d'inscription à l'Ordre des experts-comptables**, assurance responsabilité civile professionnelle. Obligatoire en France pour une profession réglementée.
 2. **Adresse e-mail** : le site utilise `contact@comptapaye.com`. Créez cette boîte dans hPanel > E-mails, ou remplacez l'adresse partout (recherche/remplacement dans les fichiers) et dans `contact-config.php` (`$CONTACT_TO` pour les demandes, `$CAREERS_TO` pour les candidatures). Créez aussi `no-reply@comptapaye.com` (expéditeur des notifications) ou modifiez `$CONTACT_FROM`.
 3. **Textes et engagements** : relisez tout le contenu et retirez ce qui ne correspond pas à votre activité (par ex. « rendez-vous au cabinet ou à distance »). Les formules « Sur devis » n'affichent volontairement aucun prix.
 4. **Horaires d'ouverture** : non renseignés faute d'information ; à ajouter dans `contact.html` si souhaité.
@@ -47,6 +47,8 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 
 ## Modifier le site
 
+- Mot du président : section `#president` de `index.html`, photo dans `assets/img/president.jpg` (640 × 800 px, portrait 4:5).
+- En-tête : la barre du haut (adresse, e-mail, téléphone, bandeau orange « Stage / Emploi ») et la barre du logo disparaissent quand on descend dans la page et réapparaissent dès qu'on remonte (`assets/js/main.js`).
 - Textes : éditez directement les fichiers `.html`. L'en-tête et le pied de page sont répétés dans chaque page : pensez à modifier chaque page pour un changement de menu.
 - Couleurs : variables CSS en haut de `assets/css/style.css`.
 - Après une modification de CSS/JS, videz le cache du navigateur (Ctrl + F5) : les fichiers sont mis en cache une semaine.
