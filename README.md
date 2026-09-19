@@ -51,7 +51,7 @@ Pas de WordPress, pas de base de données, pas de plugin : surface d'attaque min
 - En-tête : la barre du haut (adresse, e-mail, téléphone, bandeau orange « Stage / Emploi ») et la barre du logo disparaissent quand on descend dans la page et réapparaissent dès qu'on remonte (`assets/js/main.js`).
 - Textes : éditez directement les fichiers `.html`. L'en-tête et le pied de page sont répétés dans chaque page : pensez à modifier chaque page pour un changement de menu.
 - Couleurs : variables CSS en haut de `assets/css/style.css`.
-- Après une modification de CSS/JS, videz le cache du navigateur (Ctrl + F5) : les fichiers sont mis en cache une semaine.
+- Après une modification de `style.css` ou `main.js`, changez le numéro de version dans les pages (`style.css?v=…` et `main.js?v=…`, dans le `<head>` de chaque `.html`) : cela force tous les navigateurs à recharger le fichier. Le cache serveur est de 1 heure pour le CSS/JS et nul pour les pages.
 
 ## Notes techniques
 

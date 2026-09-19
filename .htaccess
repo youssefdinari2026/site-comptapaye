@@ -45,10 +45,13 @@ AddDefaultCharset UTF-8
 # --- Cache navigateur --------------------------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresByType text/html "access plus 1 hour"
-  ExpiresByType text/css "access plus 1 week"
-  ExpiresByType application/javascript "access plus 1 week"
-  ExpiresByType text/javascript "access plus 1 week"
+  # Pages : toujours revalidées (les modifications apparaissent tout de suite).
+  ExpiresByType text/html "access plus 0 seconds"
+  # CSS/JS : cache court, et les pages appellent ces fichiers avec ?v=… pour forcer le rechargement.
+  ExpiresByType text/css "access plus 1 hour"
+  ExpiresByType application/javascript "access plus 1 hour"
+  ExpiresByType application/x-javascript "access plus 1 hour"
+  ExpiresByType text/javascript "access plus 1 hour"
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
