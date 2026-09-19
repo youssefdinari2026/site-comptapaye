@@ -213,7 +213,7 @@
     var heroTimer = null;
     var heroPaused = reduceMotion;   // pas de défilement automatique si le visiteur a désactivé les animations
     var heroHover = false;
-    var DELAY = 8500;                // laisse le temps de lire le texte
+    var DELAY = 3000;                // une diapositive toutes les 3 secondes
 
     var goTo = function (n, dir) {
       n = (n + heroSlides.length) % heroSlides.length;
