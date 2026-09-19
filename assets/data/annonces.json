@@ -1,3 +1,14 @@
 {
-  "annonces": []
+  "annonces": [
+    {
+      "id": "2026-09-20-43895f",
+      "date": "2026-09-20",
+      "categorie": "emploi",
+      "titre": "Recherche D'Emploi",
+      "entreprise": "ComptaPaie",
+      "description": "Une Personne sérieuse et Rigoureuse,",
+      "contact": "Via le cabinet ComptaPaie",
+      "lien": ""
+    }
+  ]
 }
