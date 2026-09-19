@@ -59,8 +59,7 @@ Champs d'une annonce : `id`, `date` (AAAA-MM-JJ), `categorie` (`offre`, `partena
 
 ## Modifier le site
 
-- **Titre animé de l'accueil** : les mots qui se tapent (`comptabilité|paie|fiscalité|gestion|trésorerie`) sont dans l'attribut `data-words` du `<span class="rotator">` de `index.html`.
-- **Photos qui défilent** : les 2 diapositives du carrousel de l'accueil (`assets/img/hero-analyse.jpg` et `assets/img/president.jpg`). Le défilement s'arrête au survol, avec le bouton pause, et n'est pas automatique pour les visiteurs qui ont désactivé les animations. `hero-analyse.jpg` provient de la bannière de l'ancien site comptapaie.com (photo de banque d'images) : vérifiez que vous avez le droit de l'utiliser.
+- **Accueil animé** : le fond d'écran alterne toutes les 7 secondes entre deux photos (fondu + léger zoom) : `assets/img/hero-bg-1.jpg` (bannière de l'ancien site comptapaie.com) et `assets/img/hero-bg-2.jpg` (photo Unsplash, licence libre, usage commercial autorisé). Au premier plan, le texte s'écrit ligne par ligne (effet « masque » repris de l'ancien site) et le schéma reste fixe. Points et bouton pause en bas du bandeau ; pas de changement automatique pour les visiteurs qui ont désactivé les animations. Pour changer une photo : remplacer le fichier (1920 px de large, JPEG) et augmenter le numéro `?v=` des pages.
 - **Actualités** : chaque fiche est un bloc `<article class="news-card">` de `actualites.html`. Les textes sont des repères généraux à faire valider et à mettre à jour régulièrement.
 
 - Mot du président : section `#president` de `index.html`, photo dans `assets/img/president.jpg` (640 × 800 px, portrait 4:5).
