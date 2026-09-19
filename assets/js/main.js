@@ -24,12 +24,32 @@
     });
   }
 
-  /* ---- Ombre de l'en-tête au défilement ---- */
+  /* ---- En-tête : disparaît quand on descend, réapparaît quand on remonte ---- */
   var header = document.querySelector('.site-header');
   if (header) {
-    var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    var lastY = window.scrollY;
+    var ticking = false;
+    var HIDE_AFTER = 160; // ne masque qu'après ce défilement (px)
+
+    var update = function () {
+      var y = window.scrollY;
+      var menuOpen = toggle && toggle.getAttribute('aria-expanded') === 'true';
+      header.classList.toggle('is-scrolled', y > 8);
+      if (menuOpen || y <= HIDE_AFTER || y < lastY - 6) {
+        header.classList.remove('is-hidden');   // en haut de page, en remontant, ou menu ouvert
+      } else if (y > lastY + 6) {
+        header.classList.add('is-hidden');      // en descendant
+      }
+      lastY = y;
+      ticking = false;
+    };
+
+    update();
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+    }, { passive: true });
+    // Accessibilité clavier : l'en-tête réapparaît dès qu'un de ses liens reçoit le focus.
+    header.addEventListener('focusin', function () { header.classList.remove('is-hidden'); });
   }
 
   /* ---- Apparition au défilement ---- */
