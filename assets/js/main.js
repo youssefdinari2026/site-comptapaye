@@ -213,7 +213,7 @@
     var heroTimer = null;
     var heroPaused = reduceMotion;   // pas de défilement automatique si le visiteur a désactivé les animations
     var heroHover = false;
-    var DELAY = 3000;                // une diapositive toutes les 3 secondes
+    var DELAY = 3000;                // durée par défaut ; chaque diapositive peut fixer la sienne (data-duration)
 
     var goTo = function (n, dir) {
       n = (n + heroSlides.length) % heroSlides.length;
@@ -239,10 +239,12 @@
         d.setAttribute('aria-current', i === heroCur ? 'true' : 'false');
       });
     };
-    var stopHero = function () { if (heroTimer) { clearInterval(heroTimer); heroTimer = null; } };
+    var stopHero = function () { if (heroTimer) { clearTimeout(heroTimer); heroTimer = null; } };
     var startHero = function () {
       stopHero();
-      if (!heroPaused && !heroHover && !document.hidden) { heroTimer = setInterval(function () { goTo(heroCur + 1, 1); }, DELAY); }
+      if (heroPaused || heroHover || document.hidden) { return; }
+      var wait = parseInt(heroSlides[heroCur].getAttribute('data-duration'), 10) || DELAY;
+      heroTimer = setTimeout(function () { goTo(heroCur + 1, 1); startHero(); }, wait);
     };
     var syncHeroPause = function () {
       if (!heroPauseBtn) { return; }
