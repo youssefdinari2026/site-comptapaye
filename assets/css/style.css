@@ -788,3 +788,81 @@ h1 .mask, .eyebrow.mask, p.mask, h2.mask { display: block; }
   .mission-disc { width: 132px; height: 132px; }
   .mission-svg { width: 62px; height: 62px; }
 }
+
+/* ---------- Page coworking / domiciliation Marrakech ---------- */
+.cw-grid { display: grid; gap: 1.5rem; }
+@media (min-width: 760px) { .cw-grid { grid-template-columns: 1fr 1fr; } }
+.cw-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); }
+.cw-card h2 { font-size: 1.5rem; margin-bottom: .3rem; }
+.cw-card > p { color: var(--muted); margin-bottom: .6rem; }
+.cw-rates { list-style: none; margin: .8rem 0 0; }
+.cw-rates li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .95rem 0; border-top: 1px solid var(--line); }
+.cw-rates .cw-label { font-weight: 600; }
+.cw-rates .cw-price { font-size: 1.4rem; font-weight: 800; color: var(--navy); white-space: nowrap; }
+.cw-rates .cw-price small { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.cw-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+
+/* ---------- Logo : monogramme CP (image) + nom d'origine, « Expert » en orange comme la 3e barre ---------- */
+.logo, .logo:hover { color: #0f2d5e; }
+.site-footer .logo, .site-footer .logo:hover { color: #fff; }
+.logo-mark { width: auto; height: 46px; object-fit: contain; }
+.logo-tag { color: #e8a21c; }
+.logo-tag::before, .logo-tag::after { background: var(--muted); }
+.site-footer .logo-tag { color: #f0b93a; }
+.site-footer .logo-tag::before, .site-footer .logo-tag::after { background: #9fb1c9; }
+@media (max-width: 480px) { .logo-mark { height: 38px; } }
+
+/* ---------- Accueil : diapositive d'ouverture Paris (60 %) | Marrakech (40 %) ---------- */
+.hero-slide--duo { padding: 0; align-items: stretch; }
+.hero-slide--duo::after { display: none; }
+.duo-grid { position: relative; z-index: 1; width: 100%; align-self: stretch; display: grid; grid-template-columns: 1fr; }
+.duo-side { position: relative; overflow: hidden; display: flex; }
+.duo-side::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.duo-img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; }
+.duo-copy { position: relative; z-index: 1; width: 100%; }
+
+/* Paris : photo entière (3:2) ; si le bandeau est plus haut, elle se prolonge par un fond flouté de la même photo */
+.duo-side--fr { flex-direction: column; justify-content: flex-start; background: #0d1a30; }
+.duo-side--fr::before { content: ""; position: absolute; inset: -30px; z-index: 0; background: url("../img/hero-paris.webp") 50% 100% / cover no-repeat; filter: blur(22px) brightness(.75); }
+.duo-side--fr .duo-img { position: relative; z-index: 1; inset: auto; flex: none; height: auto; aspect-ratio: 3 / 2; object-position: 50% 50%; -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent 100%); mask-image: linear-gradient(180deg, #000 90%, transparent 100%); }
+.duo-side--fr::after { z-index: 2; background: linear-gradient(180deg, rgba(8, 22, 40, 0) 55%, rgba(8, 22, 40, .8) 100%); }
+.duo-copy--fr { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; width: auto; padding: 0 1.25rem 4.25rem; }
+.duo-copy--fr .hero-cta.mask { margin: 0 0 .7rem; }
+.duo-copy--fr .hero-badges { margin: 0; }
+
+/* Marrakech : texte directement sur la photo, sous les montagnes, en petit */
+.duo-side--ma { min-height: 26rem; align-items: flex-end; }
+.duo-side--ma .duo-img { object-position: 30% 50%; }
+.duo-side--ma::after { background: linear-gradient(180deg, rgba(8, 22, 40, 0) 38%, rgba(8, 22, 40, .55) 62%, rgba(8, 22, 40, .88) 100%); }
+.duo-copy--ma { padding: 0 1.25rem 1.6rem; text-align: right; text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
+.duo-copy--ma .eyebrow { font-size: .74rem; letter-spacing: .1em; margin-bottom: .4rem; }
+.duo-title { margin: 0 0 .5rem; font-size: clamp(1.3rem, 1.4vw + .85rem, 1.85rem); font-weight: 800; line-height: 1.15; color: #fff; }
+.duo-title .hl { color: var(--amber); }
+.duo-text { margin: 0; font-size: clamp(.86rem, .55vw + .58rem, 1.05rem); font-weight: 600; line-height: 1.45; color: #eef3fa; }
+.duo-copy--ma .hero-cta.mask { margin: .8rem 0 0; padding: 4px 0; text-shadow: none; }
+.duo-copy--ma .hero-cta > div { gap: .5rem; justify-content: flex-end; }
+.btn--sm { padding: .55rem 1.05rem; font-size: .88rem; }
+
+@media (max-width: 899px) {
+  .duo-side--fr { display: block; background: var(--navy); }
+  .duo-side--fr::before { display: none; }
+  .duo-side--fr .duo-img { display: block; width: 100%; -webkit-mask-image: none; mask-image: none; }
+  .duo-side--fr::after { display: none; }
+  .duo-copy--fr { position: relative; padding: 1.25rem 1.25rem 1.6rem; }
+}
+@media (min-width: 900px) {
+  .duo-grid { grid-template-columns: 3fr 2fr; }
+  .duo-copy--fr { padding-left: 4.5rem; }
+  .duo-side--ma::before { content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: 4px; background: rgba(255, 255, 255, .85); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-slide.is-active .poem-e .verse:nth-child(1) > span { animation-delay: .3s; }
+  .hero-slide.is-active .poem-e .verse:nth-child(2) > span { animation-delay: .4s; }
+  .hero-slide.is-active .poem-f .verse:nth-child(1) > span { animation-delay: .65s; }
+  .hero-slide.is-active .poem-f .verse:nth-child(2) > span { animation-delay: .75s; }
+  .hero-slide.is-active .poem-f .verse:nth-child(3) > span { animation-delay: .85s; }
+}
+
+/* Diapositive « La satisfaction du client » : même style et même taille que « votre gestion enfin sereine. » */
+.hero .slide-title.poem { font-size: clamp(1.9rem, 3.9vw, 2.8rem); line-height: 1.14; text-transform: none; margin-bottom: .4rem; }
+.hero .slide-title .hl { color: var(--amber); }
