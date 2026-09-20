@@ -67,7 +67,7 @@ ul { margin: 0; padding: 0; }
 }
 
 .container { width: min(100% - 2rem, var(--maxw)); margin-inline: auto; }
-.section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.section { padding: clamp(2rem, 4.5vw, 3.5rem) 0; }
 .section--alt { background: #fff; border-block: 1px solid var(--line); }
 .section--dark { background: var(--navy); color: #d6e0ee; }
 .section--dark h2, .section--dark h3 { color: #fff; }
@@ -81,7 +81,7 @@ ul { margin: 0; padding: 0; }
 }
 .section--dark .eyebrow, .hero .eyebrow { color: var(--amber); }
 .lead { font-size: 1.2rem; color: var(--muted); max-width: 62ch; }
-.section-head { max-width: 720px; margin-bottom: 2.5rem; }
+.section-head { max-width: 720px; margin-bottom: 1.75rem; }
 .section-head.center { margin-inline: auto; text-align: center; }
 .section-head.center .lead { margin-inline: auto; }
 
@@ -298,7 +298,8 @@ a.card { display: block; text-decoration: none; color: inherit; }
 .plan .price { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin: .25rem 0 0; }
 
 /* FAQ */
-.faq { max-width: 820px; margin-inline: auto; display: grid; gap: .8rem; }
+.faq { max-width: 1000px; margin-inline: auto; display: grid; gap: .8rem; align-items: start; }
+@media (min-width: 800px) { .faq { grid-template-columns: 1fr 1fr; gap: .9rem 1.1rem; } }
 .faq details { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 .faq summary {
   cursor: pointer; list-style: none; padding: 1.15rem 3.25rem 1.15rem 1.4rem; font-weight: 700; color: var(--navy); position: relative;
@@ -866,3 +867,12 @@ h1 .mask, .eyebrow.mask, p.mask, h2.mask { display: block; }
 /* Diapositive « La satisfaction du client » : même style et même taille que « votre gestion enfin sereine. » */
 .hero .slide-title.poem { font-size: clamp(1.9rem, 3.9vw, 2.8rem); line-height: 1.14; text-transform: none; margin-bottom: .4rem; }
 .hero .slide-title .hl { color: var(--amber); }
+
+/* ---------- Barre du haut : deux adresses (France + Maroc), adaptée à la largeur ---------- */
+.topbar-inner.container { width: min(100% - 2rem, 1400px); }
+.topbar-info { min-width: 0; font-size: .8rem; }
+.topbar-info li { white-space: nowrap; padding-right: .8rem; margin-right: .8rem; }
+@media (min-width: 980px) { .topbar-cta { padding: 0 1.4rem 0 2.6rem; font-size: .8rem; } }
+@media (max-width: 1399px) { .topbar-info li:nth-child(3) { display: none; } }
+@media (max-width: 1199px) { .topbar-info .tb-pre { display: none; } }
+@media (max-width: 1049px) { .topbar-info li:nth-child(4) { display: none; } .topbar-info li:nth-child(2) { border-right: 0; } }
