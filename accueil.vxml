@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Menu vocal (SVI) de ComptaPaie Expert — numéro 01 85 09 96 60
+  Format : VoiceXML 2.0, pour la configuration « Serveur vocal interactif en VXML » d'OVHcloud.
+
+  Touche 1 = devis
+  Touche 2 = candidature / stage (message seul, pas de transfert)
+  Touche 3 = joindre un collaborateur
+  Touche 4 = Marrakech (domiciliation, co-working)
+  Aucune touche = message « aucun choix » puis fin d'appel
+  Touche invalide = message « choix invalide » puis fin d'appel
+
+  POUR CHANGER UNE DESTINATION : cherchez « number/ » dans ce fichier (une fois par touche 1, 3 et 4)
+  et remplacez le numéro par celui voulu, au format national sans espace (ex. number/0612345678).
+  Pendant que l'appel est mis en relation, l'appelant entend la musique calme attente.wav.
+-->
+<vxml version="2.0" xml:lang="fr" xmlns="http://www.w3.org/2001/vxml">
+
+  <property name="inputmodes" value="dtmf"/>
+  <property name="timeout" value="8s"/>
+  <property name="bargein" value="true"/>
+
+  <!-- ===================== MENU D'ACCUEIL ===================== -->
+  <menu id="accueil" dtmf="true">
+    <prompt bargein="true">
+      <audio src="https://comptapaye.com/ivr/accueil-menu.wav">
+        Bonjour, et bienvenue chez Compta Paie Expert !
+        Pour un devis, tapez 1.
+        Pour une candidature ou un stage, tapez 2.
+        Pour joindre un collaborateur, tapez 3.
+        Pour nos services à Marrakech, domiciliation et co-working, tapez 4.
+      </audio>
+    </prompt>
+
+    <choice dtmf="1" next="#devis"/>
+    <choice dtmf="2" next="#candidature"/>
+    <choice dtmf="3" next="#collaborateur"/>
+    <choice dtmf="4" next="#maroc"/>
+
+    <!-- aucune touche : message « aucun choix » puis fin d'appel -->
+    <noinput><goto next="#aucunchoix"/></noinput>
+
+    <!-- touche invalide : message « choix invalide » puis fin d'appel -->
+    <nomatch><goto next="#invalide"/></nomatch>
+  </menu>
+
+  <!-- ===================== CHOIX INVALIDE ===================== -->
+  <form id="invalide">
+    <block>
+      <prompt>
+        <audio src="https://comptapaye.com/ivr/choix-invalide.wav">
+          Oups, ce choix n'est pas valable ! N'hésitez pas à nous rappeler, nous serons ravis de vous répondre. À très bientôt !
+        </audio>
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== AUCUN CHOIX ===================== -->
+  <form id="aucunchoix">
+    <block>
+      <prompt>
+        <audio src="https://comptapaye.com/ivr/aucun-choix.wav">
+          Nous n'avons pas reçu de choix. N'hésitez pas à nous rappeler, nous serons ravis de vous répondre. À très bientôt !
+        </audio>
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== TOUCHE 3 : JOINDRE UN COLLABORATEUR ===================== -->
+  <form id="collaborateur">
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-collaborateur.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec un collaborateur.</audio></prompt></block>
+    <transfer name="t" dest="number/0185090861" connecttimeout="25s" bridge="true"
+              transferaudio="https://comptapaye.com/ivr/attente.wav"/>
+    <block>
+      <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
+        <goto next="#indisponible"/>
+      </if>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== TOUCHE 1 : DEVIS ===================== -->
+  <form id="devis">
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-devis.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec un conseiller pour votre devis.</audio></prompt></block>
+    <transfer name="t" dest="number/0184165231" connecttimeout="25s" bridge="true"
+              transferaudio="https://comptapaye.com/ivr/attente.wav"/>
+    <block>
+      <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
+        <goto next="#indisponible"/>
+      </if>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== TOUCHE 4 : MARRAKECH ===================== -->
+  <form id="maroc">
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-marrakech.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec notre équipe de Marrakech.</audio></prompt></block>
+    <transfer name="t" dest="number/0185099554" connecttimeout="25s" bridge="true"
+              transferaudio="https://comptapaye.com/ivr/attente.wav"/>
+    <block>
+      <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
+        <goto next="#indisponible"/>
+      </if>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== TOUCHE 2 : CANDIDATURE (message seul) ===================== -->
+  <form id="candidature">
+    <block>
+      <prompt>
+        <audio src="https://comptapaye.com/ivr/candidature.wav">
+          Merci de votre intérêt pour Compta Paie Expert ! Pour une candidature ou un stage, envoyez-nous simplement
+          votre C V depuis notre site internet Compta Paie, rubrique candidature.
+          Nous reviendrons vers vous très vite. Merci de votre appel, et à très bientôt !
+        </audio>
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- ===================== PERSONNE NE RÉPOND ===================== -->
+  <form id="indisponible">
+    <block>
+      <prompt>
+        <audio src="https://comptapaye.com/ivr/indisponible.wav">
+          Nos conseillers sont en ligne avec d'autres clients pour le moment.
+          Nous vous accueillons du lundi au vendredi, de neuf heures trente à dix-sept heures trente.
+          Vous pouvez nous écrire à contact, arobase, compta paie, point com, ou demander un devis sur notre site internet.
+          Merci de votre appel, et à très bientôt !
+        </audio>
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+
+  <!-- en cas d'erreur technique : message poli puis fin d'appel -->
+  <catch event="error.badfetch error.semantic error.unsupported">
+    <prompt>Le service est momentanément indisponible. Merci de rappeler plus tard.</prompt>
+    <disconnect/>
+  </catch>
+
+</vxml>
