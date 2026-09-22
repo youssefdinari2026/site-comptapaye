@@ -7,6 +7,10 @@ DirectoryIndex index.html
 ErrorDocument 404 /404.html
 AddDefaultCharset UTF-8
 
+# Menu vocal OVH (VoiceXML) et son d'accueil
+AddType application/voicexml+xml .vxml
+AddType audio/wav .wav
+
 # --- Redirections : www -> domaine nu, puis HTTP -> HTTPS ------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
