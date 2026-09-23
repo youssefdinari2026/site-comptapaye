@@ -71,7 +71,7 @@
 
   <!-- ===================== TOUCHE 3 : JOINDRE UN COLLABORATEUR ===================== -->
   <form id="collaborateur">
-    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-collaborateur.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec un collaborateur.</audio></prompt></block>
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-collaborateur.wav">Un instant, nous vous mettons en relation avec un collaborateur.</audio></prompt></block>
     <transfer name="t" dest="number/0185090861" connecttimeout="25s" bridge="true"/>
     <block>
       <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
@@ -83,7 +83,7 @@
 
   <!-- ===================== TOUCHE 1 : DEVIS ===================== -->
   <form id="devis">
-    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-devis.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec un conseiller pour votre devis.</audio></prompt></block>
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-devis.wav">Un instant, nous vous mettons en relation avec un conseiller pour votre devis.</audio></prompt></block>
     <transfer name="t" dest="number/0184165231" connecttimeout="25s" bridge="true"/>
     <block>
       <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
@@ -95,7 +95,7 @@
 
   <!-- ===================== TOUCHE 4 : MARRAKECH ===================== -->
   <form id="maroc">
-    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-marrakech.wav">Avec plaisir ! Un instant, nous vous mettons en relation avec notre équipe de Marrakech.</audio></prompt></block>
+    <block><prompt><audio src="https://comptapaye.com/ivr/patienter-marrakech.wav">Un instant, nous vous mettons en relation avec notre équipe de Marrakech.</audio></prompt></block>
     <transfer name="t" dest="number/0185099554" connecttimeout="25s" bridge="true"/>
     <block>
       <if cond="t == 'busy' || t == 'noanswer' || t == 'network_busy' || t == 'unknown'">
