@@ -5,4 +5,4 @@ Disallow: /candidature.php
 Disallow: /annonce.php
 Disallow: /ivr/
 
-Sitemap: https://comptapaye.com/sitemap.xml
+Sitemap: https://comptapaie.com/sitemap.xml

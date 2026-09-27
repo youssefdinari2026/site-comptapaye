@@ -11,12 +11,17 @@ AddDefaultCharset UTF-8
 AddType application/voicexml+xml .vxml
 AddType audio/wav .wav
 
-# --- Redirections : www -> domaine nu, puis HTTP -> HTTPS ------------------
+# --- Redirections : comptapaye.com et www -> comptapaie.com, puis HTTP -> HTTPS
+# Le menu vocal OVH (/ivr/) reste servi sur comptapaye.com, sans redirection.
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  RewriteCond %{HTTP_HOST} ^www\.comptapaye\.com$ [NC]
-  RewriteRule ^ https://comptapaye.com%{REQUEST_URI} [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?comptapaye\.com$ [NC]
+  RewriteCond %{REQUEST_URI} !^/ivr/
+  RewriteRule ^ https://comptapaie.com%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.comptapaie\.com$ [NC]
+  RewriteRule ^ https://comptapaie.com%{REQUEST_URI} [L,R=301]
 
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
