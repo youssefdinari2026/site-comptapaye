@@ -7,6 +7,11 @@
   Touche 2 = candidature / stage (message seul, pas de transfert)
   Touche 3 = joindre un collaborateur
   Touche 4 = Marrakech (domiciliation, co-working)
+  HORAIRES (heure de Paris, calculée dans ce fichier, heure d'été incluse) :
+    - lundi au vendredi 9h30-17h30 : menu complet ;
+    - samedi 9h-18h : devis uniquement (transfert direct vers le conseiller devis) ;
+    - en dehors : message de fermeture horaires.wav puis fin d'appel.
+    En cas d'erreur du calcul, le menu complet est joué (sécurité).
   Aucune touche = message « aucun choix » puis fin d'appel
   Touche invalide = message « choix invalide » puis fin d'appel
 
@@ -20,6 +25,58 @@
   <property name="inputmodes" value="dtmf"/>
   <property name="timeout" value="8s"/>
   <property name="bargein" value="true"/>
+
+  <!-- ===================== ROUTAGE SELON L'HEURE (heure de Paris) ===================== -->
+  <script><![CDATA[
+    function etatCabinet() {
+      try {
+        var d = new Date();
+        var y = d.getUTCFullYear();
+        var debutEte = new Date(Date.UTC(y, 2, 31, 1, 0, 0));
+        debutEte.setUTCDate(31 - debutEte.getUTCDay());
+        var finEte = new Date(Date.UTC(y, 9, 31, 1, 0, 0));
+        finEte.setUTCDate(31 - finEte.getUTCDay());
+        var decalage = (d >= debutEte && d < finEte) ? 2 : 1;
+        var p = new Date(d.getTime() + decalage * 3600000);
+        var jour = p.getUTCDay();
+        var minutes = p.getUTCHours() * 60 + p.getUTCMinutes();
+        if (jour >= 1 && jour <= 5 && minutes >= 570 && minutes < 1050) { return 'ouvert'; }
+        if (jour == 6 && minutes >= 540 && minutes < 1080) { return 'samedi'; }
+        return 'ferme';
+      } catch (e) {
+        return 'ouvert';
+      }
+    }
+  ]]></script>
+
+  <form id="routage">
+    <catch event="error"><goto next="#accueil"/></catch>
+    <block>
+      <var name="etat" expr="etatCabinet()"/>
+      <if cond="etat == 'ferme'">
+        <goto next="#ferme"/>
+      <elseif cond="etat == 'samedi'"/>
+        <goto next="#devis"/>
+      <else/>
+        <goto next="#accueil"/>
+      </if>
+    </block>
+  </form>
+
+  <!-- ===================== CABINET FERMÉ ===================== -->
+  <form id="ferme">
+    <block>
+      <prompt>
+        <audio src="https://comptapaye.com/ivr/horaires.wav">
+          Bonjour, et merci d'avoir appelé Compta Paie Expert ! Nos bureaux sont actuellement fermés.
+          Nous vous accueillons du lundi au vendredi, de neuf heures trente à dix-sept heures trente.
+          Le samedi, nous sommes joignables uniquement pour les demandes de devis, de neuf heures à dix-huit heures.
+          Nous serons ravis de vous répondre pendant ces horaires. À très bientôt !
+        </audio>
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
 
   <!-- ===================== MENU D'ACCUEIL ===================== -->
   <menu id="accueil" dtmf="true">
